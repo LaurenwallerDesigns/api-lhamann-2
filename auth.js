@@ -1,12 +1,13 @@
 import config from './utils/config'
 import { User } from './resources/user/user.model';
 import jwt from 'jsonwebtoken'
-const EXPIRES_IN_MINUTES = '14m'
+const EXPIRES_IN_MINUTES = '114m'
 
 export const newToken = user => {
-  return jwt.sign({ id: user.id }, config.JWTSecret, {
-    expiresIn: EXPIRES_IN_MINUTES
-  })
+  const token = jwt.sign({ id: user.id }, config.JWTSecret, {
+    expiresIn: EXPIRES_IN_MINUTES,
+  });
+  return token;
 }
 
 export const verifyToken = token =>
@@ -24,7 +25,11 @@ export const signup = async (req, res) => {
   try {
     const user = await User.create(req.body)
     const token = newToken(user)
-    return res.status(201).send({ token, user})
+    return res.cookie('token', token, {
+      expires: new Date(Date.now() + EXPIRES_IN_MINUTES),
+      secure:false,
+      httpOnly: true,
+    }).status(201).json({ user })
   } catch (e) {
     console.error(e)
     return res.status(400).end()
@@ -46,7 +51,11 @@ export const signin = async (req, res) => {
       return res.status(401).send({ message: 'not auth' })
     }
     const token = newToken(user)
-    return res.status(201).send({ token })
+    return res.cookie('token', token, {
+      expires: new Date(Date.now() + EXPIRES_IN_MINUTES),
+      secure:false,
+      httpOnly: true,
+    }).status(201).json({ user })
   } catch (e) {
     console.error(e)
     return res.status(400).send({ message: 'not auth' })
@@ -54,10 +63,10 @@ export const signin = async (req, res) => {
 }
 
 export const protect = async (req, res, next) => {
-  if ( !req.headers.authorization){
+  if ( !req.cookies.token){
     return res.status(401).end()
   }
-  let token = req.headers.authorization.split('Bearer ')[1]
+  let token = req.cookies.token || '';
   if ( !token ) {
     return res.status(401).end()
   }

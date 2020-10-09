@@ -8,14 +8,23 @@ import userRouter from './resources/user/user.router';
 import blogRouter from './resources/blog/blog.router';
 import blogRouterUn from './resources/unprotected/blog.router.un';
 import { signup, signin, protect } from './auth'
+import cookieParser from 'cookie-parser';
 
 export const app = express()
 
 app.disable('x-powered-by')
 
-app.use(cors())
+app.use(cors({
+    origin: [
+        'http://localhost:3000/',
+        'https://lhamann.com/',
+        'https://www.lhamann.com/'
+    ],
+    credentials: true
+}));
 app.use(json())
 app.use(urlencoded({ extended: true }))
+app.use(cookieParser())
 app.use('/blog', blogRouterUn)
 app.post('/signup', signup)
 app.post('/signin', signin)

@@ -15,6 +15,7 @@ const blogSchema = new mongoose.Schema({
         ref: 'user',
         required: true
     },
+    category: String,
     comments: [{
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'comment' }]

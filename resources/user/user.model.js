@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema(
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
         password: { type: String, required: true },
-        admin: {type: Boolean}
+        admin: {type: Boolean},
+        blogs: [{type: mongoose.SchemaTypes.ObjectId,
+            ref: 'user' }]
     },
     { timestamps: true },
 )
