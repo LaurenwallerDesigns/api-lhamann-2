@@ -29,6 +29,20 @@ export const getOne = model => async (req, res) => {
       res.status(400).end()
     }
   }
+
+  export const getAll = model => async (req, res) => {
+    try {
+      const docs = await model
+        .find()
+        .lean()
+        .exec()
+  
+      res.status(200).json({ data: docs })
+    } catch (e) {
+      console.error(e)
+      res.status(400).end()
+    }
+  }
   
   export const createOne = model => async (req, res) => {
     const createdBy = req.user._id
@@ -88,6 +102,7 @@ export const getOne = model => async (req, res) => {
     removeOne: removeOne(model),
     updateOne: updateOne(model),
     getMany: getMany(model),
+    getAll: getAll(model),
     getOne: getOne(model),
     createOne: createOne(model)
   })

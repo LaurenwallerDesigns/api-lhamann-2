@@ -6,7 +6,6 @@ import cors from 'cors'
 import {connect}  from './utils/db'
 import userRouter from './resources/user/user.router';
 import blogRouter from './resources/blog/blog.router';
-import blogRouterUn from './resources/unprotected/blog.router.un';
 import { signup, signin, protect } from './auth'
 import cookieParser from 'cookie-parser';
 
@@ -25,7 +24,6 @@ app.use(cors({
 app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(cookieParser())
-app.use('/blog', blogRouterUn)
 app.post('/signup', signup)
 app.post('/signin', signin)
 app.use('/api', protect)

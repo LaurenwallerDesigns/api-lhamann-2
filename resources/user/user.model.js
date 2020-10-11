@@ -8,8 +8,9 @@ const userSchema = new mongoose.Schema(
         lastName: { type: String, required: true },
         password: { type: String, required: true },
         admin: {type: Boolean},
-        blogs: [{type: mongoose.SchemaTypes.ObjectId,
-            ref: 'user' }]
+        blogs: [{
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: 'blog' }]
     },
     { timestamps: true },
 )

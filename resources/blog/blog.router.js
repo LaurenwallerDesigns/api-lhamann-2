@@ -6,9 +6,12 @@ const blogRouter = Router()
 // /api/list
 blogRouter
   .route('/')
-  .get(controllers.getMany)
+  .get(controllers.getAll)
   .post(controllers.createOne)
 
+  blogRouter
+  .route('/user')
+  .get(controllers.getMany)
 // /api/list/:id
 blogRouter
   .route('/:id')
